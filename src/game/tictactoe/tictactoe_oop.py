@@ -9,7 +9,6 @@ class TTTBoard:
 
     def __init__(self):
         """初始化棋盘"""
-        print("被调用了吗")
         self._spaces = {space: BLANK for space in ALL_SPACES}
 
     def is_valid_space(self, space) -> bool:
@@ -64,6 +63,7 @@ class TTTBoard:
 
 
 class MiniBoard(TTTBoard):
+    """小棋盘"""
     def __str__(self):
         s = {
             space: '.' if val == BLANK else val
