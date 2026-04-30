@@ -1,4 +1,4 @@
-from tictactoe_oop import (TTTBoard, X, O, MiniBoard)
+from tictactoe_oop import (HintBoard, X, O, MiniBoard)
 
 
 def run():
@@ -6,7 +6,7 @@ def run():
     if input("是否使用小棋盘？(y/n): ").lower() == 'y':
         board = MiniBoard()
     else:
-        board = TTTBoard()
+        board = HintBoard()
     current_player, next_player = X, O  # X先行，O后行
 
     while True:

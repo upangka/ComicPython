@@ -64,6 +64,7 @@ class TTTBoard:
 
 class MiniBoard(TTTBoard):
     """小棋盘"""
+
     def __str__(self):
         s = {
             space: '.' if val == BLANK else val
@@ -77,3 +78,36 @@ class MiniBoard(TTTBoard):
                     """
 
     __repr__ = __str__
+
+
+class HintBoard(TTTBoard):
+    """添加说明X和O是否只差一步胜利"""
+
+    def __str__(self):
+        msgs = [super().__str__()]
+        if self._judge_next_win(X):
+            msgs.append(f"{X}的下一步能获胜")
+        if self._judge_next_win(O):
+            msgs.append(f"{O}的下一步能获胜")
+        return '\n'.join(msgs)
+
+    def _judge_next_win(self, player):
+        """判断玩家在下一步是否能获胜（通过模拟尝试每个空位）
+
+        Args:
+            player: 要检查的玩家，应该是 'X' 或 'O'
+
+        Returns:
+            bool: 如果玩家能在下一步获胜返回 True，否则返回 False
+        """
+        origin_space = self._spaces.copy()  # 保存原始棋盘状态用于恢复
+        is_win = False
+        for space in self._spaces.keys():
+            if self._spaces[space] == BLANK:  # 只检查空位
+                super().update_board(space, player)  # 模拟在该位置落子
+                if self.is_winner(player):
+                    is_win = True
+                    break
+                super().update_board(space, BLANK)  # 恢复该位置为空位，尝试下一个位置
+        self._spaces = origin_space  # 恢复原始棋盘状态
+        return is_win
