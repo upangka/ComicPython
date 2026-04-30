@@ -1,10 +1,10 @@
-from tictactoe_oop import (HintBoard, X, O, MiniBoard)
+from tictactoe_oop import (HintBoard,HybridBoard, X, O, MiniBoard)
 
 
 def run():
     print("Welcome to tic-tac-toe")
     if input("是否使用小棋盘？(y/n): ").lower() == 'y':
-        board = MiniBoard()
+        board = HybridBoard()
     else:
         board = HintBoard()
     current_player, next_player = X, O  # X先行，O后行

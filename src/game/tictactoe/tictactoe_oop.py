@@ -111,3 +111,8 @@ class HintBoard(TTTBoard):
                 super().update_board(space, BLANK)  # 恢复该位置为空位，尝试下一个位置
         self._spaces = origin_space  # 恢复原始棋盘状态
         return is_win
+
+
+class HybridBoard(HintBoard,MiniBoard):
+    """mini棋盘拥有提示功能"""
+    pass
