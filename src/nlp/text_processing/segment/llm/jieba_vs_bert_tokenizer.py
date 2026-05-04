@@ -71,7 +71,7 @@ def show_vocab_sample(tokenizer: Tokenizer, start: int = 100, n: int = 10) -> No
 
 if __name__ == "__main__":
     # 加载 BERT 多语言分词器
-    bert_tokenizer = load_bert_tokenizer("./bert-multilingual-tokenizer")
+    bert_tokenizer = load_bert_tokenizer("bert-multilingual-tokenizer")
 
     # 瞄一眼 BERT 词表
     show_vocab_sample(bert_tokenizer, start=100, n=10)

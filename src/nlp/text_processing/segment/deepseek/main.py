@@ -1,5 +1,5 @@
 from tokenizers import Tokenizer
-tokenize = Tokenizer.from_file("./tokenizer.json")
+tokenize = Tokenizer.from_file("tokenizer.json")
 
 encoding = tokenize.encode("大家好，我爱深圳图书馆")
 print(f"token count {len(encoding)}")
