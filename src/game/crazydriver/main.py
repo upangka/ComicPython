@@ -64,11 +64,23 @@ while True:
     enemy.rect.move_ip(0, move_speed)
     if enemy.rect.top > IMG_ROAD.get_height():
         enemy.reset()
+
+    keys = pygame.key.get_pressed()
+    if keys[K_LEFT] and player.rect.left > 0:
+        player.rect.move_ip(-move_speed, 0)
+        if player.rect.left < 0:
+            player.rect.left = 0
+    if keys[K_RIGHT] and player.rect.right < IMG_ROAD.get_width():
+        player.rect.move_ip(move_speed, 0)
+        if player.rect.right > IMG_ROAD.get_width():
+            player.rect.right = IMG_ROAD.get_width()
+
     # 事件检查
     for event in pygame.event.get():
-        print(type(event), event)
+
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+
     # 刷新
     pygame.display.update()
