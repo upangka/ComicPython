@@ -1,7 +1,9 @@
 import random
 import sys
+import time
 
 import pygame
+from pygame import Surface
 from pygame.locals import *
 
 from resources import *
@@ -12,7 +14,10 @@ RED = (255, 0, 0)
 
 # 移动速度 5像素
 move_speed = 5
+temp_move_speed = 0
+max_speed = 10
 score = 0
+paused = False
 
 # 图片surface
 IMG_ROAD = pygame.image.load(IMG_ROAD_FILE_PATH)
@@ -29,23 +34,46 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, enemy: Surface):
         super().__init__()
-        self.image = IMG_ENEMY
-        self.surf = pygame.surface.Surface(IMG_ENEMY.get_size())
+        self.image = enemy
+        self.surf = pygame.surface.Surface(enemy.get_size())
         self.rect = self.surf.get_rect(
-            center=(random.randint(IMG_ENEMY.get_width() // 2, 800 - IMG_ENEMY.get_width() // 2), 0))
+            center=(random.randint(self.image.get_width() // 2, IMG_ROAD.get_width() - self.image.get_width() // 2), 0))
 
     def reset(self):
-        self.rect.center = (random.randint(IMG_ENEMY.get_width() // 2, 800 - IMG_ENEMY.get_width() // 2), 0)
+        self.rect.center = (
+            random.randint(self.image.get_width() // 2, IMG_ROAD.get_width() - self.image.get_width() // 2), 0)
+
+
+class GameOverTip(pygame.sprite.Sprite):
+    text_size = 40
+    font_path = os.path.join(GAME_ROOT_FOLDER, 'fonts', '字心坊小呀小布丁.TTF')
+
+    def __init__(self, tip: str):
+        super().__init__()
+        self.font_style = pygame.font.Font(GameOverTip.font_path, GameOverTip.text_size)
+        self.surf = self.font_style.render(tip, True, RED)
+        self.rect = self.surf.get_rect(center=(IMG_ROAD.get_width() // 2, IMG_ROAD.get_height() // 2))
+
 
 def game_over():
     print("游戏结束")
+    tip = GameOverTip('游戏结束')
+    screen.fill(BLACK)
+    screen.blit(tip.surf, tip.rect)
+    pygame.display.update()
+
+    player.kill()
+    enemy.kill()
+
+    time.sleep(5)
     pygame.quit()
     sys.exit()
 
+
 player = Player()
-enemy = Enemy()
+enemy = Enemy(IMG_ENEMY)
 pygame.init()
 # 管理帧率
 clock = pygame.time.Clock()
@@ -68,6 +96,9 @@ while True:
             pygame.quit()
             sys.exit()
 
+    if pygame.sprite.collide_rect(player, enemy):
+        game_over()
+
     # 加到主surface上
     screen.blit(IMG_ROAD, (0, 0))
     screen.blit(player.image, player.rect)
@@ -76,19 +107,28 @@ while True:
     if enemy.rect.top > IMG_ROAD.get_height():
         enemy.reset()
         score += 1
+        if move_speed < max_speed:
+            move_speed += 1
 
     keys = pygame.key.get_pressed()
-    if (keys[K_LEFT] or keys[K_a]) and player.rect.left > 0:
-        player.rect.move_ip(-move_speed, 0)
-        if player.rect.left < 0:
-            player.rect.left = 0
-    if (keys[K_RIGHT] or keys[K_d]) and player.rect.right < IMG_ROAD.get_width():
-        player.rect.move_ip(move_speed, 0)
-        if player.rect.right > IMG_ROAD.get_width():
-            player.rect.right = IMG_ROAD.get_width()
+    if paused:
+        if keys[K_SPACE]:
+            paused = False
+            move_speed = temp_move_speed
+    else:
+        if (keys[K_LEFT] or keys[K_a]) and player.rect.left > 0:
+            player.rect.move_ip(-move_speed, 0)
+            if player.rect.left < 0:
+                player.rect.left = 0
+        if (keys[K_RIGHT] or keys[K_d]) and player.rect.right < IMG_ROAD.get_width():
+            player.rect.move_ip(move_speed, 0)
+            if player.rect.right > IMG_ROAD.get_width():
+                player.rect.right = IMG_ROAD.get_width()
 
-    if pygame.sprite.collide_rect(player, enemy):
-        game_over()
+        if keys[K_SPACE]:
+            paused = True
+            temp_move_speed = move_speed
+            move_speed = 0
 
     pygame.display.set_caption(f'疯狂赛车 得分: {score}')
 
