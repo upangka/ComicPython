@@ -1,13 +1,17 @@
+import random
 import sys
 
 import pygame
 from pygame.locals import *
-import random
+
 from resources import *
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+
+# 移动速度 5像素
+move_speed = 5
 
 # 图片surface
 IMG_ROAD = pygame.image.load(IMG_ROAD_FILE_PATH)
@@ -22,12 +26,19 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.surface.Surface(IMG_PLAYER.get_size())
         self.rect = self.surf.get_rect(center=(250, 800 - 80 / 2))
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = IMG_ENEMY
         self.surf = pygame.surface.Surface(IMG_ENEMY.get_size())
-        self.rect = self.surf.get_rect(center=(random.randint(IMG_ENEMY.get_width()//2, 800 - IMG_ENEMY.get_width()//2), 0))
+        self.rect = self.surf.get_rect(
+            center=(random.randint(IMG_ENEMY.get_width() // 2, 800 - IMG_ENEMY.get_width() // 2), 0))
+
+    def reset(self):
+        self.rect.center = (random.randint(IMG_ENEMY.get_width() // 2, 800 - IMG_ENEMY.get_width() // 2), 0)
+
+
 player = Player()
 enemy = Enemy()
 pygame.init()
@@ -50,6 +61,9 @@ while True:
     screen.blit(IMG_ROAD, (0, 0))
     screen.blit(player.image, player.rect)
     screen.blit(enemy.image, enemy.rect)
+    enemy.rect.move_ip(0, move_speed)
+    if enemy.rect.top > IMG_ROAD.get_height():
+        enemy.reset()
     # 事件检查
     for event in pygame.event.get():
         print(type(event), event)
