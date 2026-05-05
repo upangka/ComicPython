@@ -12,6 +12,7 @@ RED = (255, 0, 0)
 
 # 移动速度 5像素
 move_speed = 5
+score = 0
 
 # 图片surface
 IMG_ROAD = pygame.image.load(IMG_ROAD_FILE_PATH)
@@ -74,6 +75,7 @@ while True:
     enemy.rect.move_ip(0, move_speed)
     if enemy.rect.top > IMG_ROAD.get_height():
         enemy.reset()
+        score += 1
 
     keys = pygame.key.get_pressed()
     if (keys[K_LEFT] or keys[K_a]) and player.rect.left > 0:
@@ -88,6 +90,7 @@ while True:
     if pygame.sprite.collide_rect(player, enemy):
         game_over()
 
+    pygame.display.set_caption(f'疯狂赛车 得分: {score}')
 
     # 刷新
     pygame.display.update()
