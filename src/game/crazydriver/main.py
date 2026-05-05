@@ -38,6 +38,10 @@ class Enemy(pygame.sprite.Sprite):
     def reset(self):
         self.rect.center = (random.randint(IMG_ENEMY.get_width() // 2, 800 - IMG_ENEMY.get_width() // 2), 0)
 
+def game_over():
+    print("游戏结束")
+    pygame.quit()
+    sys.exit()
 
 player = Player()
 enemy = Enemy()
@@ -57,6 +61,12 @@ pygame.display.update()
 
 # 主循环
 while True:
+    # 事件检查
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
     # 加到主surface上
     screen.blit(IMG_ROAD, (0, 0))
     screen.blit(player.image, player.rect)
@@ -66,21 +76,18 @@ while True:
         enemy.reset()
 
     keys = pygame.key.get_pressed()
-    if keys[K_LEFT] and player.rect.left > 0:
+    if (keys[K_LEFT] or keys[K_a]) and player.rect.left > 0:
         player.rect.move_ip(-move_speed, 0)
         if player.rect.left < 0:
             player.rect.left = 0
-    if keys[K_RIGHT] and player.rect.right < IMG_ROAD.get_width():
+    if (keys[K_RIGHT] or keys[K_d]) and player.rect.right < IMG_ROAD.get_width():
         player.rect.move_ip(move_speed, 0)
         if player.rect.right > IMG_ROAD.get_width():
             player.rect.right = IMG_ROAD.get_width()
 
-    # 事件检查
-    for event in pygame.event.get():
+    if pygame.sprite.collide_rect(player, enemy):
+        game_over()
 
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
 
     # 刷新
     pygame.display.update()
