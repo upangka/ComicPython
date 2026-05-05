@@ -2,6 +2,12 @@
 
 重构版本 v2：使用面向对象设计和设计模式
 """
+import sys
+from pathlib import Path
+
+# 将当前目录添加到 Python 路径
+sys.path.insert(0, str(Path(__file__).parent))
+
 from game.engine import GameEngine
 
 
