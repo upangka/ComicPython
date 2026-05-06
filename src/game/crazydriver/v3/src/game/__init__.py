@@ -1,4 +1,5 @@
-
 from .engine import GameEngine
 
-__ALL__ = [GameEngine]
+__ALL__ = [
+    GameEngine
+]

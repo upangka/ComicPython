@@ -1,10 +1,15 @@
+import logging
+
 import pygame
 
 from entities import (
     Player,
     Enemy
 )
+from .state import GameStateManager
 from settings import GameConfig
+
+logger = logging.getLogger(__name__)
 
 
 class GameEngine:
@@ -16,6 +21,7 @@ class GameEngine:
         self.config = GameConfig.from_bg_image("Road.png")
         self._init_pygame()
         self._init_sprite()
+        self._st_mgr = GameStateManager(self)
 
     def _init_pygame(self):
         """初始化 Pygame"""
@@ -60,5 +66,11 @@ class GameEngine:
     def run(self):
         while self._running:
             self._process_sys_events()
+            keys = pygame.key.get_pressed()
+            self._st_mgr.handle_keypress(keys)
             self._render()
         print("游戏结束")
+
+    def update_sprites(self):
+        # logger.info("更新精灵")
+        ...
