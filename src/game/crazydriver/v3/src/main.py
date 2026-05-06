@@ -5,8 +5,7 @@ from settings import GameConfig
 
 
 def main():
-    cfg = GameConfig.from_bg_image('Road.png')
-    engine = GameEngine(cfg)
+    engine = GameEngine('Road.png')
     try:
         engine.run()
     except Exception as e:

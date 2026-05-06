@@ -7,15 +7,15 @@ from settings import GameConfig
 class GameEngine:
     """游戏主引擎 - 管理游戏生命周期、事件循环、渲染（门面模式）"""
 
-    def __init__(self, config: GameConfig):
+    def __init__(self, bg_img:str):
+        pygame.init()
         self._running = True
-        self.config = config
+        self.config = GameConfig.from_bg_image(bg_img)
         self._init_pygame()
         self._init_sprite()
 
     def _init_pygame(self):
         """初始化 Pygame"""
-        pygame.init()
         self.screen = pygame.display.set_mode(
             self.config.SCREEN.get_size()
         )
