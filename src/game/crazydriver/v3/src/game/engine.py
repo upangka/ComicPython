@@ -44,8 +44,8 @@ class GameEngine:
         self.all_sprites = pygame.sprite.Group()
         pass
 
-    def _process_events(self):
-        """处理（消费）游戏事件,不然主屏幕会卡住"""
+    def _process_sys_events(self):
+        """处理（消费）游戏系统事件,不然主屏幕会卡住"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._running = False
@@ -59,5 +59,6 @@ class GameEngine:
 
     def run(self):
         while self._running:
-            self._process_events()
+            self._process_sys_events()
             self._render()
+        print("游戏结束")
