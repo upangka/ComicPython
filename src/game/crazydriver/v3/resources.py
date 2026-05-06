@@ -4,10 +4,11 @@
 使用前请确保已调用 pygame.init()。
 """
 
-from pathlib import Path
-import pygame
 import logging
+from pathlib import Path
 from typing import Dict
+
+import pygame
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +108,10 @@ class ResourceManager:
         return self._font_cache[cache_key]
 
 
-# 单例实例 - 模块导入时创建
-# 使用前请确保已调用 pygame.init()
-resources = ResourceManager()
+resources: ResourceManager = ResourceManager()
+"""全局资源管理器单例实例
+提供统一的资源加载接口，支持图片和字体的缓存管理。
+Example:
+    >>> from resources import resources
+    >>> font = resources.load_font('字心坊小呀小布丁.TTF', 25)
+"""
