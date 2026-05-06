@@ -18,6 +18,7 @@ RED = (255, 0, 0)
 move_speed = 5
 temp_move_speed = 0
 max_speed = 10
+
 score = 0
 paused = False
 
@@ -116,6 +117,8 @@ while True:
     screen.blit(IMG_ROAD, (0, 0))
     screen.blit(player.image, player.rect)
     screen.blit(enemy.image, enemy.rect)
+    pygame.display.set_caption(f'疯狂赛车 得分: {score}')
+    
     enemy.rect.move_ip(0, move_speed)
     if enemy.rect.top > IMG_ROAD.get_height():
         enemy.reset()
@@ -143,7 +146,7 @@ while True:
             temp_move_speed = move_speed
             move_speed = 0
 
-    pygame.display.set_caption(f'疯狂赛车 得分: {score}')
+    
 
     # 刷新
     pygame.display.update()

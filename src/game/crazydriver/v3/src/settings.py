@@ -31,6 +31,7 @@ class GameConfig:
     MAX_SPEED: int = 10
 
     PLAYER_IMG: str = "Player.png"
+    ENEMY_IMG: str = "Enemy.png"
 
     @classmethod
     def from_bg_image(cls, img_name: str):

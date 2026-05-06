@@ -1,6 +1,6 @@
-
-from resources import resources
 from entities import BaseEntity
+from resources import resources
+
 
 class Player(BaseEntity):
     """玩家类，负责玩家移动和渲染"""
@@ -10,7 +10,7 @@ class Player(BaseEntity):
         # 初始位置底部居中
         center = (screen_width // 2, screen_height - image.get_rect().height // 2)
         super().__init__(
-            image,
-            center
+            image=image,
+            center=center
         )
         self.screen_width = screen_width
