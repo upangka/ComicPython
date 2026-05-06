@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import pygame
+
 from resources import resources
 
 
@@ -17,20 +19,25 @@ class GameConfig:
        SCREEN_WIDTH: 屏幕宽度（像素），默认值会被动态覆盖
        SCREEN_HEIGHT: 屏幕高度（像素），默认值会被动态覆盖
    """
+
+    # 屏幕尺寸将从背景图片动态获取，这里作为默认值
+    SCREEN_WIDTH: int = 500
+    SCREEN_HEIGHT: int = 800
+    SCREEN: pygame.Surface = pygame.surface.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+
     WINDOW_TITLE: str = '疯狂赛车'
     FPS: int = 60
     INITIAL_SPEED: int = 5
     MAX_SPEED: int = 10
 
-    # 屏幕尺寸将从背景图片动态获取，这里作为默认值
-    SCREEN_WIDTH: int = 500
-    SCREEN_HEIGHT: int = 800
-
     @classmethod
     def from_bg_image(cls, img_name: str):
         """根据背景图片动态设置屏幕尺寸大小"""
         img = resources.load_image(img_name)
-        return cls(SCREEN_WIDTH=img.get_width(), SCREEN_HEIGHT=img.get_height())
+        return cls(
+            SCREEN_WIDTH=img.get_width(),
+            SCREEN_HEIGHT=img.get_height(),
+            SCREEN=img)
 
 
 class Color:
