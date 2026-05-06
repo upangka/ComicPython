@@ -6,8 +6,8 @@ from entities import (
     Player,
     Enemy
 )
-from .state import GameStateManager
 from settings import GameConfig
+from .state import GameStateManager
 
 logger = logging.getLogger(__name__)
 
@@ -65,10 +65,14 @@ class GameEngine:
 
     def run(self):
         while self._running:
-            self._process_sys_events()
-            keys = pygame.key.get_pressed()
-            self._st_mgr.handle_keypress(keys)
-            self._render()
+            try:
+                self._process_sys_events()
+                keys = pygame.key.get_pressed()
+                self._st_mgr.handle_keypress(keys)
+                self._render()
+            except Exception as e:
+                logger.error(f"游戏异常: {str(e)}")
+
         print("游戏结束")
 
     def update_sprites(self):

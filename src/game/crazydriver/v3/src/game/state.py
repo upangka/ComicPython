@@ -89,8 +89,7 @@ class GameStateManager:
     def current_state(self, state: GameState):
         logger.debug(f"当前状态: {self.current_state.name}")
         if state not in self.available_states:
-            logger.error(f"Invalid state: {state}")
-            raise ValueError(f"Invalid state: {state}")
+            raise ValueError(f"更新状态失败: {state.name}无效")
 
         self._current_state = state
         logger.info(f"状态更新为: {state.name}")
