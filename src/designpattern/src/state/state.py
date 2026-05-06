@@ -23,6 +23,7 @@ class BaseState(ABC):
 
 
 class AmState(BaseState):
+    "AM状态"
     def __init__(self, radio: Radio):
         super().__init__(radio)
         self.name = "AM"
@@ -34,6 +35,7 @@ class AmState(BaseState):
 
 
 class FmState(BaseState):
+    """FM状态"""
     def __init__(self, radio: Radio):
         super().__init__(radio)
         self.name = "FM"
@@ -45,8 +47,6 @@ class FmState(BaseState):
 
 
 from enum import Enum
-
-
 class RadioState(Enum):
     AM = "AM"
     FM = "FM"
@@ -83,8 +83,8 @@ class Radio:
 
 
 if __name__ == '__main__':
-    radio = Radio()
+    r = Radio()
     from typing import Callable
 
-    actions: list[Callable] = [radio.scan] * 2 + [radio.toggle_amfm] + [radio.scan] * 2
+    actions: list[Callable] = [r.scan] * 2 + [r.toggle_amfm] + [r.scan] * 2
     [c() for c in actions]
