@@ -8,8 +8,7 @@ def main():
     cfg = GameConfig.from_bg_image('Road.png')
     engine = GameEngine(cfg)
     try:
-        # engine.run()
-        pass
+        engine.run()
     except Exception as e:
         logging.error(f'游戏异常退出: {str(e)}')
         raise

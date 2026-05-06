@@ -32,6 +32,15 @@ class GameEngine:
     def _init_resources(self):
         pass
 
+    def _process_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self._running = False
+
+    def _render(self):
+        pygame.display.update()
+
     def run(self):
         while self._running:
-            pass
+            self._process_events()
+            self._render()
