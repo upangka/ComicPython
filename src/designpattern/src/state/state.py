@@ -50,7 +50,7 @@ from enum import Enum
 class RadioState(Enum):
     AM = "AM"
     FM = "FM"
-    OTHER = "OTHER"
+    OTHER = "NOT Support Yet"
 
 
 class Radio:
