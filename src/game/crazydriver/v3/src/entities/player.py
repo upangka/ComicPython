@@ -1,18 +1,16 @@
-import pygame
 
 from resources import resources
+from entities import BaseEntity
 
-
-class Player(pygame.sprite.Sprite):
+class Player(BaseEntity):
     """玩家类，负责玩家移动和渲染"""
 
     def __init__(self, img_name: str, screen_width: int, screen_height: int):
-        self.img = resources.load_image(img_name)
-        self._rect = self.img.get_rect()
+        image = resources.load_image(img_name)
         # 初始位置底部居中
-        self._rect.center = (screen_width // 2, screen_height - self.rect.height // 2)
+        center = (screen_width // 2, screen_height - image.get_rect().height // 2)
+        super().__init__(
+            image,
+            center
+        )
         self.screen_width = screen_width
-
-    @property
-    def rect(self):
-        return self._rect

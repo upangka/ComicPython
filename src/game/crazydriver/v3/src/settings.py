@@ -30,6 +30,8 @@ class GameConfig:
     INITIAL_SPEED: int = 5
     MAX_SPEED: int = 10
 
+    PLAYER_IMG: str = "Player.png"
+
     @classmethod
     def from_bg_image(cls, img_name: str):
         """根据背景图片动态设置屏幕尺寸大小"""

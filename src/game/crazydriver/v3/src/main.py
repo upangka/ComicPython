@@ -1,11 +1,10 @@
 import logging
 
 from game import GameEngine
-from settings import GameConfig
 
 
 def main():
-    engine = GameEngine('Road.png')
+    engine = GameEngine()
     try:
         engine.run()
     except Exception as e:
@@ -20,7 +19,7 @@ if __name__ == '__main__':
         format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d:  %(message)s',
         datefmt='%H:%M:%S'
     )
-    
+
     main()
     # 查看当前搜索路径
     # import sys

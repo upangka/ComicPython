@@ -7,10 +7,10 @@ from settings import GameConfig
 class GameEngine:
     """游戏主引擎 - 管理游戏生命周期、事件循环、渲染（门面模式）"""
 
-    def __init__(self, bg_img:str):
+    def __init__(self):
         pygame.init()
         self._running = True
-        self.config = GameConfig.from_bg_image(bg_img)
+        self.config = GameConfig.from_bg_image("Road.png")
         self._init_pygame()
         self._init_sprite()
 
@@ -24,10 +24,12 @@ class GameEngine:
     def _init_sprite(self):
         """初始化游戏精灵"""
         self.player = Player(
-            'Player.png',
+            self.config.PLAYER_IMG,
             self.config.SCREEN_WIDTH,
             self.config.SCREEN_HEIGHT
         )
+        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites.add(self.player)
 
     def _init_resources(self):
         pass
@@ -38,6 +40,8 @@ class GameEngine:
                 self._running = False
 
     def _render(self):
+        self.screen.blit(self.config.SCREEN, (0, 0))
+        self.all_sprites.draw(self.screen)
         pygame.display.update()
 
     def run(self):
