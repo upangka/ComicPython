@@ -21,6 +21,7 @@ if __name__ == '__main__':
         format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d:  %(message)s',
         datefmt='%H:%M:%S'
     )
+    
     main()
     # 查看当前搜索路径
     # import sys
