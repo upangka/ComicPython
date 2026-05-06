@@ -37,7 +37,7 @@ wheels = [
 [[package]]
 name = "v3"
 version = "0.1.0"
-source = { virtual = "crazydriver/v3" }
+source = { editable = "crazydriver/v3" }
 dependencies = [
     { name = "pygame" },
 ]
