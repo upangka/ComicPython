@@ -6,7 +6,7 @@ import pygame
 from pygame import Surface
 from pygame.locals import *
 
-from resources import *
+# from resources import *
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -18,6 +18,17 @@ temp_move_speed = 0
 max_speed = 10
 score = 0
 paused = False
+
+# 资源路径
+
+GAME_ROOT_FOLDER = os.path.dirname(__file__)
+IMAGES_FOLDER = os.path.join(GAME_ROOT_FOLDER, 'images')
+
+IMG_ROAD_FILE_PATH = os.path.join(IMAGES_FOLDER, 'Road.png')
+IMG_PLAYER_FILE_PATH = os.path.join(IMAGES_FOLDER, 'Player.png')
+IMG_ENEMY_FILE_PATH = os.path.join(IMAGES_FOLDER, 'Enemy.png')
+IMG_ENEMY2_FILE_PATH = os.path.join(IMAGES_FOLDER, 'Enemy2.png')
+IMG_ENEMY3_FILE_PATH = os.path.join(IMAGES_FOLDER, 'Enemy3.png')
 
 # 图片surface
 IMG_ROAD = pygame.image.load(IMG_ROAD_FILE_PATH)

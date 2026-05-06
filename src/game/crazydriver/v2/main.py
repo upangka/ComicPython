@@ -15,7 +15,7 @@ def main():
     """游戏主函数"""
     # 创建游戏引擎实例
     game = GameEngine()
-    
+
     # 运行游戏
     try:
         game.run()

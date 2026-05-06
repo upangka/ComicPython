@@ -6,3 +6,8 @@ requires-python = ">=3.13"
 dependencies = [
     "pygame>=2.6.1",
 ]
+
+[tool.uv.workspace]
+members = [
+    "crazydriver/v3",
+]
