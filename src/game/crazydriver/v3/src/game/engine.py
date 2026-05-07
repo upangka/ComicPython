@@ -11,6 +11,7 @@ from entities.player import PlayerInput
 from settings import GameConfig
 from .state import (GameStateManager, GameState)
 from .score import ScoreManager
+from .util import check_player_enemy_collision
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,10 @@ class GameEngine:
 
     def _init_sprite(self):
         """初始化游戏精灵"""
+        # 管理所有精灵
         self.all_sprites = pygame.sprite.Group()
+        # 单独管理敌人
+        self.enemies = pygame.sprite.Group()
 
         self.player = Player(
             self.config.PLAYER_IMG,
@@ -53,11 +57,11 @@ class GameEngine:
             self.config.SCREEN_HEIGHT
         )
 
+        self.enemies.add(self.enemy)
         self.all_sprites.add(self.player, self.enemy)
 
     def _init_resources(self):
-        # 管理所有精灵
-        self.all_sprites = pygame.sprite.Group()
+
         pass
 
     def _process_sys_events(self):
@@ -73,7 +77,7 @@ class GameEngine:
         # group封装了统一处理
         self.all_sprites.draw(self.screen)
         # 得分
-        pygame.display.set_caption(f"得分: {self.score_mgr.score}")
+        pygame.display.set_caption(f"{self.config.WINDOW_TITLE}  得分: {self.score_mgr.score}")
         pygame.display.update()
 
     def run(self):
@@ -93,15 +97,26 @@ class GameEngine:
     def update_sprites(self):
         """更新精灵"""
         keys = pygame.key.get_pressed()
+        play_input = PlayerInput(
+            move_left=keys[K_LEFT] or keys[K_a],
+            move_right=keys[K_RIGHT] or keys[K_d],
+            paused=self._st_mgr.current_state == GameState.PAUSED
+        )
         self.player.update(
-            player_input=PlayerInput(
-                move_left=keys[K_LEFT] or keys[K_a],
-                move_right=keys[K_RIGHT] or keys[K_d],
-                paused=self._st_mgr.current_state == GameState.PAUSED
-            ),
+            player_input=play_input,
             speed=self._current_speed
         )
 
-        if self.enemy.update(speed=self._current_speed):
-            self.score_mgr.add_score(points=1)
-            logger.info(f"得分: {self.score_mgr}")
+        for enemy in self.enemies:
+            if self.enemy.update(speed=self._current_speed):
+                self.score_mgr.add_score(points=1)
+                logger.info(f"得分: {self.score_mgr}")
+
+        if check_player_enemy_collision(self.player, self.enemies):
+            self._game_over()
+
+    def _game_over(self):
+        self._running = False
+
+
+
