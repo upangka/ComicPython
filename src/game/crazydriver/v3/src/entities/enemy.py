@@ -80,10 +80,10 @@ class Enemy(BaseEntity):
         """
 
         overlap = True
-        for _ in range(15):
+        for _ in range(30):
             self.rect.center = next(self._generate_center)
             for enemy in existing_enemies:
-                if enemy is not self and enemy.rect.top < 200:
+                if enemy is not self and enemy.rect.top < 250:
                     if abs(enemy.rect.x - self.rect.x) < min_distance:
                         overlap = True
                         break

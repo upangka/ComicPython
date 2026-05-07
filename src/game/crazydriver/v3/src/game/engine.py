@@ -130,7 +130,7 @@ class GameEngine:
                 self._frame_count += 1
                 self.clock.tick(self.config.FPS)
                 self._process_sys_events()
-                # 检查玩家和敌人碰撞，优化碰撞时视觉效果
+                # 检查玩家和敌人碰撞，优化碰撞时视觉效果，避免滞后性
                 self._check_collision()
                 self._st_mgr.update_sprites()
                 self._render()
