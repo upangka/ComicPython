@@ -130,6 +130,8 @@ class GameEngine:
                 self._frame_count += 1
                 self.clock.tick(self.config.FPS)
                 self._process_sys_events()
+                # 检查玩家和敌人碰撞，优化碰撞时视觉效果
+                self._check_collision()
                 self._st_mgr.update_sprites()
                 self._render()
 
@@ -165,7 +167,11 @@ class GameEngine:
                 )
         # 动态管理敌人生成
         self._manage_enemy_spawning()
-        # 检测玩家和敌人碰撞
+
+    def _check_collision(self):
+        """检测玩家和敌人碰撞
+        为避免滞后性在渲染后检查
+        """
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()
 
@@ -201,7 +207,13 @@ class GameEngine:
                 text=f"当前得分: {self.score_mgr.score}",
                 center=(self.config.SCREEN_WIDTH // 2, 0),  # 临时位置，后续调整
                 color=Color.WHITE
-            )
+            ),
+            GameOverTip(
+                text="古法编程之美(Pkmer)",
+                center=(self.config.SCREEN_WIDTH // 2, 0),  # 临时位置，后续调整
+                color=Color.GREEN,
+                font_size=40
+            ),
         ]
 
         # 计算总高度并设置真正的居中位置
