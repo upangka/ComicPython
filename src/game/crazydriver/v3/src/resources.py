@@ -29,7 +29,7 @@ class ResourceManager:
         self._image_cache: Dict[Path, pygame.Surface] = {}
         self._font_cache: Dict[tuple, pygame.font.Font] = {}
 
-        logger.info("ResourceManager 初始化完成")
+        logger.debug("ResourceManager 初始化完成")
         logger.debug(f"图片目录: {self._images_dir}")
         logger.debug(f"字体目录: {self._fonts_dir}")
 
@@ -59,7 +59,7 @@ class ResourceManager:
                 logger.error(f"图片文件不存在: {img_name}, 路径: {image_path}")
                 raise FileNotFoundError(f'图片 {img_name} 不存在')
 
-            logger.info(f"加载图片: {img_name}")
+            logger.debug(f"加载图片: {img_name}")
             try:
                 self._image_cache[image_path] = pygame.image.load(image_path)
                 logger.debug(f"图片加载成功: {img_name}, 尺寸: {self._image_cache[image_path].get_size()}")
@@ -97,7 +97,7 @@ class ResourceManager:
                 logger.error(f"字体文件不存在: {font_name}, 路径: {font_path}")
                 raise FileNotFoundError(f'字体 {font_name} 不存在')
 
-            logger.info(f"加载字体: {font_name}, 大小: {size}")
+            logger.debug(f"加载字体: {font_name}, 大小: {size}")
             try:
                 self._font_cache[cache_key] = pygame.font.Font(font_path, size)
                 logger.debug(f"字体加载成功: {font_name}")

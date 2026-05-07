@@ -75,6 +75,10 @@ class GameEngine:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._handle_quit()
+            if event.type == KEYDOWN and event.key == K_SPACE:
+                print("切换状态")
+                self._st_mgr.toggle_state()
+
 
     def _render(self):
         # 绘制背景
@@ -92,8 +96,7 @@ class GameEngine:
                 # 添加帧率限制确保游戏运行稳定
                 self.clock.tick(self.config.FPS)
                 self._process_sys_events()
-                keys = pygame.key.get_pressed()
-                self._st_mgr.handle_keypress(keys)
+                self._st_mgr.update_sprites()
                 self._render()
             except Exception as e:
                 logger.error(f"游戏异常: {str(e)}")
@@ -116,7 +119,7 @@ class GameEngine:
         for enemy in self.enemies:
             if self.enemy.update(speed=self._current_speed):
                 self.score_mgr.add_score(points=1)
-                logger.info(f"得分: {self.score_mgr}")
+                logger.debug(f"得分: {self.score_mgr}")
 
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()

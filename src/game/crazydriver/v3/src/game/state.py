@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-
+import pygame
 from pygame.locals import *
 
 logger = logging.getLogger(__name__)
@@ -17,17 +17,12 @@ class BaseState(ABC):
         self._context = context
 
     @abstractmethod
-    def handle_keypress(self, keys):
-        """处理按键"""
-        ...
-
-    @abstractmethod
-    def _update_sprites(self):
+    def update_sprites(self):
         """更新游戏状态"""
         ...
 
     @abstractmethod
-    def _change_state(self):
+    def change_state(self):
         """切换游戏状态"""
         ...
 
@@ -38,16 +33,24 @@ class RunningState(BaseState):
     def __init__(self, context: GameStateManager):
         super().__init__(context)
 
-    def handle_keypress(self, keys):
-        self._update_sprites()
-        if keys[K_SPACE]:
-            self._change_state()
-
-    def _update_sprites(self):
+    def update_sprites(self):
         self._context.engine.update_sprites()
 
-    def _change_state(self):
+    def change_state(self):
         self._context.current_state = GameState.PAUSED
+
+class PausedState(BaseState):
+    """暂停状态"""
+
+    def __init__(self, context: GameStateManager):
+        super().__init__(context)
+
+    def change_state(self):
+        self._context.current_state = GameState.RUNNING
+
+    def update_sprites(self):
+        """不做精灵的移动"""
+        ...
 
 
 from enum import Enum
@@ -74,12 +77,21 @@ class GameStateManager:
         """
         self.available_states = {
             GameState.RUNNING: RunningState(self),
+            GameState.PAUSED: PausedState(self)
         }
         self._current_state_type = GameState.RUNNING
         self.engine = engine
 
-    def handle_keypress(self, keys):
-        self.available_states[self.current_state].handle_keypress(keys)
+    def update_sprites(self):
+        """根据游戏当前不同的状态进行操作精灵"""
+        state = self.available_states[self.current_state]
+        state.update_sprites()
+
+    def toggle_state(self):
+        """切换游戏状态"""
+        state = self.available_states[self.current_state]
+        state.change_state()
+
 
     @property
     def current_state(self):
