@@ -33,6 +33,9 @@ class GameConfig:
     PLAYER_IMG: str = "Player.png"
     ENEMY_IMG: str = "Enemy.png"
 
+    FONT: str = '字心坊小呀小布丁.TTF'
+    FONT_SIZE: int = 25
+
     @classmethod
     def from_bg_image(cls, img_name: str):
         """根据背景图片动态设置屏幕尺寸大小"""

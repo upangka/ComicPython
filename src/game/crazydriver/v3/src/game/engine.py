@@ -1,4 +1,6 @@
 import logging
+import sys
+import time
 
 import pygame
 from pygame.locals import *
@@ -9,8 +11,9 @@ from entities import (
 )
 from entities.player import PlayerInput
 from settings import GameConfig
-from .state import (GameStateManager, GameState)
+from ui.game_over_tip import GameOverTip
 from .score import ScoreManager
+from .state import (GameStateManager, GameState)
 from .util import check_player_enemy_collision
 
 logger = logging.getLogger(__name__)
@@ -20,18 +23,26 @@ class GameEngine:
     """游戏主引擎 - 管理游戏生命周期、事件循环、渲染（门面模式）"""
 
     def __init__(self):
-        pygame.init()
-        self._running = True
-        self.config = GameConfig.from_bg_image("Road.png")
-        self._current_speed = self.config.INITIAL_SPEED
-        self._init_pygame()
+        self._init_resources()
+        self._init_screen()
         self._init_sprite()
         self._st_mgr = GameStateManager(self)
         self.score_mgr = ScoreManager()
         # 帧率控制
         self.clock = pygame.time.Clock()
+        self._running = True
 
-    def _init_pygame(self):
+    def _init_resources(self):
+        """初始化资源"""
+        pygame.init()
+        self.config = GameConfig.from_bg_image("Road.png")
+        self._current_speed = self.config.INITIAL_SPEED
+        GameOverTip.config(
+            font=self.config.FONT,
+            font_size=self.config.FONT_SIZE
+        )
+
+    def _init_screen(self):
         """初始化 Pygame"""
         self.screen = pygame.display.set_mode(
             self.config.SCREEN.get_size()
@@ -60,15 +71,11 @@ class GameEngine:
         self.enemies.add(self.enemy)
         self.all_sprites.add(self.player, self.enemy)
 
-    def _init_resources(self):
-
-        pass
-
     def _process_sys_events(self):
         """处理（消费）游戏系统事件,不然主屏幕会卡住"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self._running = False
+                self._handle_quit()
 
     def _render(self):
         # 绘制背景
@@ -116,7 +123,22 @@ class GameEngine:
             self._game_over()
 
     def _game_over(self):
+        self._handle_quit()
+
+    def _handle_quit(self):
+        """处理退出游戏"""
         self._running = False
 
+        from settings import Color
+        self.screen.fill(Color.BLACK)
+        GameOverTip(
+            text="游戏结束",
+            center=(self.config.SCREEN_WIDTH // 2, self.config.SCREEN_HEIGHT // 2),
+            color=Color.RED
+        ).render(self.screen)
 
-
+        pygame.display.flip()
+        [sprite.kill() for sprite in self.all_sprites]
+        time.sleep(5)
+        pygame.quit()
+        sys.exit()
