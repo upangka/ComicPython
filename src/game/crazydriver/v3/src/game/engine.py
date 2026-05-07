@@ -93,8 +93,8 @@ class GameEngine:
         if len(self.enemies) < max_enemies and self._frame_count % spawn_interval == 0:
             self._spawn_enemy()
 
-        # 如果已经6个敌人，就开始增加速度
-        if len(self.enemies) >= max_enemies and self._frame_count % spawn_interval == 0:
+        # 如果已经6个敌人，就开始增加速度,没121帧加一个
+        if len(self.enemies) >= max_enemies and self._frame_count % 121 == 0:
             self._current_speed = min(self.config.MAX_SPEED, self._current_speed + 1)
 
     def _process_sys_events(self):
