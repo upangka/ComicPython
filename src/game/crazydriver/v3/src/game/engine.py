@@ -79,6 +79,7 @@ class GameEngine:
     def run(self):
         while self._running:
             try:
+                # 添加帧率限制确保游戏运行稳定
                 self.clock.tick(self.config.FPS)
                 self._process_sys_events()
                 keys = pygame.key.get_pressed()
