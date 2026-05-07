@@ -27,6 +27,8 @@ class GameEngine:
         self._init_sprite()
         self._st_mgr = GameStateManager(self)
         self.score_mgr = ScoreManager()
+        # 帧率控制
+        self.clock = pygame.time.Clock()
 
     def _init_pygame(self):
         """初始化 Pygame"""
@@ -65,15 +67,19 @@ class GameEngine:
                 self._running = False
 
     def _render(self):
+        # 绘制背景
         self.screen.blit(self.config.SCREEN, (0, 0))
         # 绘制所有精灵 比如画一个玩家 self.screen.blit(self.player.image, self.player.rect)
         # group封装了统一处理
         self.all_sprites.draw(self.screen)
+        # 得分
+        pygame.display.set_caption(f"得分: {self.score_mgr.score}")
         pygame.display.update()
 
     def run(self):
         while self._running:
             try:
+                self.clock.tick(self.config.FPS)
                 self._process_sys_events()
                 keys = pygame.key.get_pressed()
                 self._st_mgr.handle_keypress(keys)
