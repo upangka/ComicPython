@@ -1,6 +1,5 @@
 import logging
 import sys
-import time
 
 import pygame
 from pygame.locals import *
@@ -131,23 +130,24 @@ class GameEngine:
         # 根据帧率计算需要等待的帧数
         target_frames = seconds * self.config.FPS
         current_frame = 0
-        
+
         while current_frame < target_frames:
             self.clock.tick(self.config.FPS)  # 保持帧率稳定
             self._process_sys_events()
             current_frame += 1
 
-    def _game_over(self):
+    def _render_game_over_screen(self):
+        """渲染游戏结束界面，显示多行居中文本"""
         from settings import Color
-        self.screen.fill(Color.BLACK)
-        
+
         # 创建多行文本，计算整体居中位置
         line_height = 50  # 行间距
         lines = [
             GameOverTip(
                 text="游戏结束",
                 center=(self.config.SCREEN_WIDTH // 2, 0),  # 临时位置，后续调整
-                color=Color.RED
+                color=Color.RED,
+                font_size=40
             ),
             GameOverTip(
                 text=f"当前得分: {self.score_mgr.score}",
@@ -155,14 +155,21 @@ class GameEngine:
                 color=Color.WHITE
             )
         ]
-        
+
         # 计算总高度并设置真正的居中位置
         total_height = len(lines) * line_height
         start_y = (self.config.SCREEN_HEIGHT - total_height) // 2 + line_height // 2
-        
+
         for i, tip in enumerate(lines):
-            tip.rect.centery = start_y + i * line_height
+            tip.rect.y = start_y + i * line_height
             tip.render(self.screen)
+
+    def _game_over(self):
+        from settings import Color
+        self.screen.fill(Color.BLACK)
+
+        # 渲染游戏结束界面
+        self._render_game_over_screen()
 
         pygame.display.flip()
 
