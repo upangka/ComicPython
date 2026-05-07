@@ -77,20 +77,25 @@ class GameEngine:
             self.config.SCREEN_HEIGHT,
             speed_multiplier=speed_multiplier
         )
+        self.enemies.add(enemy)
+        self.all_sprites.add(enemy)
         # 尝试找到不重叠的位置，就算没找到，就重置位置，问题不大
         enemy.try_non_overlap_position(
             existing_enemies=self.enemies,
         )
-        self.enemies.add(enemy)
-        self.all_sprites.add(enemy)
+
 
     def _manage_enemy_spawning(self) -> None:
-        """根据分数动态管理敌人生成"""
+        """难度升级根据分数动态管理敌人生成"""
         max_enemies = min(2 + self.score_mgr.score // 5, 6)  # 最多6个敌人
         spawn_interval = max(120 - self.score_mgr.score * 2, 30)  # 生成间隔逐渐缩短
 
         if len(self.enemies) < max_enemies and self._frame_count % spawn_interval == 0:
             self._spawn_enemy()
+
+        # 如果已经6个敌人，就开始增加速度
+        if len(self.enemies) >= max_enemies and self._frame_count % spawn_interval == 0:
+            self._current_speed = min(self.config.MAX_SPEED, self._current_speed + 1)
 
     def _process_sys_events(self):
         """处理（消费）游戏系统事件,不然主屏幕会卡住"""
