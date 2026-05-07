@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass,astuple
 
 from entities import BaseEntity
 from resources import resources
@@ -6,9 +6,12 @@ from resources import resources
 
 @dataclass(frozen=True)
 class PlayerInput:
-    left: bool
-    right: bool
-    paused: bool
+    move_left: bool
+    move_right: bool
+    paused: bool = False
+
+    def __iter__(self):
+        return iter(astuple(self))
 
 
 class Player(BaseEntity):
@@ -25,4 +28,12 @@ class Player(BaseEntity):
         self.screen_width = screen_width
 
     def update(self, *, player_input: PlayerInput, speed: int):
-        ...
+        """更新玩家位置"""
+        move_left,move_right,paused = player_input
+        if not paused:
+            if move_left:
+                self.rect.x = max(0, self.rect.x - speed)
+            if move_right:
+                self.rect.x = min(self.screen_width - self.rect.width, self.rect.x + speed)
+
+

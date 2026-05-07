@@ -75,7 +75,7 @@ class GameStateManager:
         self.available_states = {
             GameState.RUNNING: RunningState(self),
         }
-        self._current_state = GameState.RUNNING
+        self._current_state_type = GameState.RUNNING
         self.engine = engine
 
     def handle_keypress(self, keys):
@@ -83,7 +83,7 @@ class GameStateManager:
 
     @property
     def current_state(self):
-        return self._current_state
+        return self._current_state_type
 
     @current_state.setter
     def current_state(self, state: GameState):
@@ -91,7 +91,7 @@ class GameStateManager:
         if state not in self.available_states:
             raise ValueError(f"更新状态失败: {state.name}无效")
 
-        self._current_state = state
+        self._current_state_type = state
         logger.info(f"状态更新为: {state.name}")
 
     def __str__(self):

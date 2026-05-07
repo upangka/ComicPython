@@ -1,13 +1,15 @@
 import logging
 
 import pygame
+from pygame.locals import *
 
 from entities import (
     Player,
     Enemy
 )
+from entities.player import PlayerInput
 from settings import GameConfig
-from .state import GameStateManager
+from .state import (GameStateManager, GameState)
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +20,11 @@ class GameEngine:
     def __init__(self):
         pygame.init()
         self._running = True
+        self._st_mgr = GameStateManager(self)
         self.config = GameConfig.from_bg_image("Road.png")
+        self._current_speed = self.config.INITIAL_SPEED
         self._init_pygame()
         self._init_sprite()
-        self._st_mgr = GameStateManager(self)
 
     def _init_pygame(self):
         """初始化 Pygame"""
@@ -76,5 +79,13 @@ class GameEngine:
         print("游戏结束")
 
     def update_sprites(self):
-        # logger.info("更新精灵")
-        ...
+        """更新精灵"""
+        keys = pygame.key.get_pressed()
+        self.player.update(
+            player_input=PlayerInput(
+                move_left=keys[K_LEFT] or keys[K_a],
+                move_right=keys[K_RIGHT] or keys[K_d],
+                paused=self._st_mgr.current_state == GameState.PAUSED
+            ),
+            speed=self._current_speed
+        )
