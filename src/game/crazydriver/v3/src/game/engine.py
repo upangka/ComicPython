@@ -140,11 +140,29 @@ class GameEngine:
     def _game_over(self):
         from settings import Color
         self.screen.fill(Color.BLACK)
-        GameOverTip(
-            text="游戏结束",
-            center=(self.config.SCREEN_WIDTH // 2, self.config.SCREEN_HEIGHT // 2),
-            color=Color.RED
-        ).render(self.screen)
+        
+        # 创建多行文本，计算整体居中位置
+        line_height = 50  # 行间距
+        lines = [
+            GameOverTip(
+                text="游戏结束",
+                center=(self.config.SCREEN_WIDTH // 2, 0),  # 临时位置，后续调整
+                color=Color.RED
+            ),
+            GameOverTip(
+                text=f"当前得分: {self.score_mgr.score}",
+                center=(self.config.SCREEN_WIDTH // 2, 0),  # 临时位置，后续调整
+                color=Color.WHITE
+            )
+        ]
+        
+        # 计算总高度并设置真正的居中位置
+        total_height = len(lines) * line_height
+        start_y = (self.config.SCREEN_HEIGHT - total_height) // 2 + line_height // 2
+        
+        for i, tip in enumerate(lines):
+            tip.rect.centery = start_y + i * line_height
+            tip.render(self.screen)
 
         pygame.display.flip()
 
