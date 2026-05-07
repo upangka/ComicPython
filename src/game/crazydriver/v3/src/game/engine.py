@@ -10,6 +10,7 @@ from entities import (
 from entities.player import PlayerInput
 from settings import GameConfig
 from .state import (GameStateManager, GameState)
+from .score import ScoreManager
 
 logger = logging.getLogger(__name__)
 
@@ -20,11 +21,12 @@ class GameEngine:
     def __init__(self):
         pygame.init()
         self._running = True
-        self._st_mgr = GameStateManager(self)
         self.config = GameConfig.from_bg_image("Road.png")
         self._current_speed = self.config.INITIAL_SPEED
         self._init_pygame()
         self._init_sprite()
+        self._st_mgr = GameStateManager(self)
+        self.score_mgr = ScoreManager()
 
     def _init_pygame(self):
         """初始化 Pygame"""
