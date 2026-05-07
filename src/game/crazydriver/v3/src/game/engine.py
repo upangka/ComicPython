@@ -122,13 +122,22 @@ class GameEngine:
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()
 
+    def _wait_with_event_processing(self, seconds: int = 5):
+        """等待指定秒数，同时处理系统事件，防止屏幕卡住
+        
+        Args:
+            seconds: 等待的秒数，默认为5秒
+        """
+        # 根据帧率计算需要等待的帧数
+        target_frames = seconds * self.config.FPS
+        current_frame = 0
+        
+        while current_frame < target_frames:
+            self.clock.tick(self.config.FPS)  # 保持帧率稳定
+            self._process_sys_events()
+            current_frame += 1
+
     def _game_over(self):
-        self._handle_quit()
-
-    def _handle_quit(self):
-        """处理退出游戏"""
-        self._running = False
-
         from settings import Color
         self.screen.fill(Color.BLACK)
         GameOverTip(
@@ -138,7 +147,15 @@ class GameEngine:
         ).render(self.screen)
 
         pygame.display.flip()
+
+        # 等待5秒，同时处理系统事件，防止屏幕卡住
+        self._wait_with_event_processing(5)
+
         [sprite.kill() for sprite in self.all_sprites]
-        time.sleep(5)
+        self._handle_quit()
+
+    def _handle_quit(self):
+        """处理退出游戏"""
+        self._running = False
         pygame.quit()
         sys.exit()
