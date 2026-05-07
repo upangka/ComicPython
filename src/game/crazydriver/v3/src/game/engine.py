@@ -1,4 +1,5 @@
 import logging
+import random
 import sys
 
 import pygame
@@ -60,15 +61,19 @@ class GameEngine:
             self.config.SCREEN_WIDTH,
             self.config.SCREEN_HEIGHT
         )
+        self.all_sprites.add(self.player)
 
-        self.enemy = Enemy(
-            "Enemy.png",
-            self.config.SCREEN_WIDTH,
-            self.config.SCREEN_HEIGHT
-        )
+        for _ in range(3):
+            img_name, speed_multiplier, _ = random.choice(self.config.ENEMY_TYPES)
+            self.enemy = Enemy(
+                img_name,
+                self.config.SCREEN_WIDTH,
+                self.config.SCREEN_HEIGHT,
+                speed_multiplier=speed_multiplier
+            )
 
-        self.enemies.add(self.enemy)
-        self.all_sprites.add(self.player, self.enemy)
+            self.enemies.add(self.enemy)
+            self.all_sprites.add(self.enemy)
 
     def _process_sys_events(self):
         """处理（消费）游戏系统事件,不然主屏幕会卡住"""
@@ -79,7 +84,6 @@ class GameEngine:
                 logger.info("切换状态")
                 self._st_mgr.toggle_state()
 
-
     def _render(self):
         # 绘制背景
         self.screen.blit(self.config.SCREEN, (0, 0))
@@ -88,10 +92,10 @@ class GameEngine:
         # self.all_sprites.draw(self.screen)
 
         # 分开绘制
-        self.screen.blit(self.player.image,self.player.rect)
+        self.screen.blit(self.player.image, self.player.rect)
 
         for enemy in self.enemies:
-            self.screen.blit(enemy.image, enemy.rect)
+            enemy.active and self.screen.blit(enemy.image, enemy.rect)
 
         # 得分
         pygame.display.set_caption(f"{self.config.WINDOW_TITLE}  得分: {self.score_mgr.score}")
@@ -132,7 +136,6 @@ class GameEngine:
                 enemy.try_non_overlap_position(
                     existing_enemies=self.enemies,
                 )
-
 
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()

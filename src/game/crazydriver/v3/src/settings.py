@@ -33,7 +33,7 @@ class GameConfig:
     PLAYER_IMG: str = "Player.png"
     ENEMY_IMG: str = "Enemy.png"
 
-    ENEMY_TYPES: list[tuple[str, float, int]] = field(default=lambda: [
+    ENEMY_TYPES: list[tuple[str, float, int]] = field(default_factory=lambda: [
         ('Enemy.png', 1.0, 80),  # 最小间距80px
         ('Enemy2.png', 1.2, 90),  # 最小间距90px（图片更大）
         ('Enemy3.png', 1.5, 100),  # 最小间距100px（图片最大）
