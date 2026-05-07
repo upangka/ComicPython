@@ -31,6 +31,8 @@ class GameEngine:
         # 帧率控制
         self.clock = pygame.time.Clock()
         self._running = True
+        # 帧控制，用于计算敌人出现的间隔
+        self._frame_count = 0
 
     def _init_resources(self):
         """初始化资源"""
@@ -63,17 +65,32 @@ class GameEngine:
         )
         self.all_sprites.add(self.player)
 
-        for _ in range(3):
-            img_name, speed_multiplier, _ = random.choice(self.config.ENEMY_TYPES)
-            self.enemy = Enemy(
-                img_name,
-                self.config.SCREEN_WIDTH,
-                self.config.SCREEN_HEIGHT,
-                speed_multiplier=speed_multiplier
-            )
+        for _ in range(2):
+            self._spawn_enemy()
 
-            self.enemies.add(self.enemy)
-            self.all_sprites.add(self.enemy)
+    def _spawn_enemy(self) -> None:
+        """生成一个随机敌人"""
+        img_name, speed_multiplier, _ = random.choice(self.config.ENEMY_TYPES)
+        enemy = Enemy(
+            img_name,
+            self.config.SCREEN_WIDTH,
+            self.config.SCREEN_HEIGHT,
+            speed_multiplier=speed_multiplier
+        )
+        # 尝试找到不重叠的位置，就算没找到，就重置位置，问题不大
+        enemy.try_non_overlap_position(
+            existing_enemies=self.enemies,
+        )
+        self.enemies.add(enemy)
+        self.all_sprites.add(enemy)
+
+    def _manage_enemy_spawning(self) -> None:
+        """根据分数动态管理敌人生成"""
+        max_enemies = min(2 + self.score_mgr.score // 5, 6)  # 最多6个敌人
+        spawn_interval = max(120 - self.score_mgr.score * 2, 30)  # 生成间隔逐渐缩短
+
+        if len(self.enemies) < max_enemies and self._frame_count % spawn_interval == 0:
+            self._spawn_enemy()
 
     def _process_sys_events(self):
         """处理（消费）游戏系统事件,不然主屏幕会卡住"""
@@ -98,19 +115,22 @@ class GameEngine:
             enemy.active and self.screen.blit(enemy.image, enemy.rect)
 
         # 得分
-        pygame.display.set_caption(f"{self.config.WINDOW_TITLE}  得分: {self.score_mgr.score}")
+        pygame.display.set_caption(f"{self.config.WINDOW_TITLE}  得分: {self.score_mgr.score}  敌人总数: {len(self.enemies)}")
         pygame.display.update()
 
     def run(self):
         while self._running:
             try:
                 # 添加帧率限制确保游戏运行稳定
+                self._frame_count += 1
                 self.clock.tick(self.config.FPS)
                 self._process_sys_events()
                 self._st_mgr.update_sprites()
                 self._render()
+
             except Exception as e:
                 logger.error(f"游戏异常: {str(e)}")
+                raise
 
         print("游戏结束")
 
@@ -122,13 +142,15 @@ class GameEngine:
             move_right=keys[K_RIGHT] or keys[K_d],
             paused=self._st_mgr.current_state == GameState.PAUSED
         )
+        # 更新玩家
         self.player.update(
             player_input=play_input,
             speed=self._current_speed
         )
 
+        # 更新敌人移动柜
         for enemy in self.enemies:
-            if self.enemy.update(speed=self._current_speed):
+            if enemy.update(speed=self._current_speed):
                 logger.debug(f"得分: {self.score_mgr}")
                 self.score_mgr.add_score(points=1)
                 enemy.reset()
@@ -136,7 +158,9 @@ class GameEngine:
                 enemy.try_non_overlap_position(
                     existing_enemies=self.enemies,
                 )
-
+        # 动态管理敌人生成
+        self._manage_enemy_spawning()
+        # 检测玩家和敌人碰撞
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()
 

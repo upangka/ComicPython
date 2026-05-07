@@ -27,7 +27,7 @@ class GameConfig:
 
     WINDOW_TITLE: str = '疯狂赛车'
     FPS: int = 60
-    INITIAL_SPEED: int = 5
+    INITIAL_SPEED: int = 6
     MAX_SPEED: int = 10
 
     PLAYER_IMG: str = "Player.png"
