@@ -35,8 +35,8 @@ class GameConfig:
 
     ENEMY_TYPES: list[tuple[str, float, int]] = field(default_factory=lambda: [
         ('Enemy.png', 1.0, 80),  # 最小间距80px
-        ('Enemy2.png', 1.2, 90),  # 最小间距90px（图片更大）
-        ('Enemy3.png', 1.5, 100),  # 最小间距100px（图片最大）
+        ('Enemy2.png', 1.1, 90),  # 最小间距90px（图片更大）
+        ('Enemy3.png', 1.2, 100),  # 最小间距100px（图片最大）
     ])
 
     FONT: str = '字心坊小呀小布丁.TTF'

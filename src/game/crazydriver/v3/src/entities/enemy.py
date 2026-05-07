@@ -69,7 +69,7 @@ class Enemy(BaseEntity):
         self.active = False
 
     def try_non_overlap_position(self, existing_enemies: 'pygame.sprite.Group',
-                                 min_distance: int = 80) -> bool:
+                                 min_distance: int = 100) -> bool:
         """
         尝试找到不与其他敌人重叠的位置（最多尝试15次）
         Args:
@@ -83,7 +83,7 @@ class Enemy(BaseEntity):
         for _ in range(15):
             self.rect.center = next(self._generate_center)
             for enemy in existing_enemies:
-                if enemy is not self and enemy.rect.top < 150:
+                if enemy is not self and enemy.rect.top < 200:
                     if abs(enemy.rect.x - self.rect.x) < min_distance:
                         overlap = True
                         break
