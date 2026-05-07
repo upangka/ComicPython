@@ -93,4 +93,5 @@ class GameEngine:
             speed=self._current_speed
         )
 
-        self.enemy.update(speed=self._current_speed)
+        if self.enemy.update(speed=self._current_speed):
+            logger.info("得分+1")

@@ -30,10 +30,20 @@ class Enemy(BaseEntity):
             center=next(self._generate_pos)
         )
 
-    def update(self, *, speed: int):
+    def update(self, *, speed: int) -> bool:
+        """更新敌人位置
+            
+        Args:
+            speed: 敌人移动速度
+                
+        Returns:
+            bool: 如果敌人超出屏幕底部返回True（可用于记分），否则返回False
+        """
         self.rect.y += speed
         if self.rect.y > self.screen_height:
             self.reset()
+            return True
+        return False
 
     def reset(self):
         self.rect.center = next(self._generate_pos)
