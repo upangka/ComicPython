@@ -16,3 +16,6 @@ class Enemy(BaseEntity):
             image=image,
             center=(random.randrange(low, max), image.get_rect().height // 2)
         )
+
+    def update(self,*,speed: int):
+        ...

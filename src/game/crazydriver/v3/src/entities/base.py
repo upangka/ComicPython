@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC,abstractmethod
 
 import pygame
 
@@ -16,3 +16,8 @@ class BaseEntity(pygame.sprite.Sprite, ABC):
         self.image = image
         self.rect = self.image.get_rect(center=center)
         super().__init__()
+
+    @abstractmethod
+    def update(self,*args,**kwargs):
+        """更新精灵"""
+        ...

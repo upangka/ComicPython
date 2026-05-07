@@ -1,5 +1,14 @@
+from dataclasses import dataclass
+
 from entities import BaseEntity
 from resources import resources
+
+
+@dataclass(frozen=True)
+class PlayerInput:
+    left: bool
+    right: bool
+    paused: bool
 
 
 class Player(BaseEntity):
@@ -14,3 +23,6 @@ class Player(BaseEntity):
             center=center
         )
         self.screen_width = screen_width
+
+    def update(self, *, player_input: PlayerInput, speed: int):
+        ...
