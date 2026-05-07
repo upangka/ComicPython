@@ -76,7 +76,7 @@ class GameEngine:
             if event.type == pygame.QUIT:
                 self._handle_quit()
             if event.type == KEYDOWN and event.key == K_SPACE:
-                print("切换状态")
+                logger.info("切换状态")
                 self._st_mgr.toggle_state()
 
 
@@ -85,7 +85,14 @@ class GameEngine:
         self.screen.blit(self.config.SCREEN, (0, 0))
         # 绘制所有精灵 比如画一个玩家 self.screen.blit(self.player.image, self.player.rect)
         # group封装了统一处理
-        self.all_sprites.draw(self.screen)
+        # self.all_sprites.draw(self.screen)
+
+        # 分开绘制
+        self.screen.blit(self.player.image,self.player.rect)
+
+        for enemy in self.enemies:
+            self.screen.blit(enemy.image, enemy.rect)
+
         # 得分
         pygame.display.set_caption(f"{self.config.WINDOW_TITLE}  得分: {self.score_mgr.score}")
         pygame.display.update()
@@ -118,8 +125,14 @@ class GameEngine:
 
         for enemy in self.enemies:
             if self.enemy.update(speed=self._current_speed):
-                self.score_mgr.add_score(points=1)
                 logger.debug(f"得分: {self.score_mgr}")
+                self.score_mgr.add_score(points=1)
+                enemy.reset()
+                # 引擎尝试找到不重叠的位置
+                enemy.try_non_overlap_position(
+                    existing_enemies=self.enemies,
+                )
+
 
         if check_player_enemy_collision(self.player, self.enemies):
             self._game_over()

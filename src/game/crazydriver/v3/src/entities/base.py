@@ -11,7 +11,7 @@ class BaseEntity(pygame.sprite.Sprite, ABC):
         and a Surface.rect.
     """
 
-    def __init__(self, *, image: pygame.Surface, center: tuple):
+    def __init__(self, *, image: pygame.Surface, center: tuple = (0,0)):
         """精灵类的要求必须要有image和rect属性"""
         self.image = image
         self.rect = self.image.get_rect(center=center)
