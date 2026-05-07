@@ -43,10 +43,13 @@ class GameEngine:
             self.config.SCREEN_HEIGHT
         )
 
-        enemy = Enemy("Enemy.png", self.config.SCREEN_WIDTH)
+        self.enemy = Enemy(
+            "Enemy.png",
+            self.config.SCREEN_WIDTH,
+            self.config.SCREEN_HEIGHT
+        )
 
-        self.all_sprites.add(self.player)
-        self.all_sprites.add(enemy)
+        self.all_sprites.add(self.player, self.enemy)
 
     def _init_resources(self):
         # 管理所有精灵
@@ -89,3 +92,5 @@ class GameEngine:
             ),
             speed=self._current_speed
         )
+
+        self.enemy.update(speed=self._current_speed)
