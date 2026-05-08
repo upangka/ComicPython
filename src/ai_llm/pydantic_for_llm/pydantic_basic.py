@@ -1,15 +1,21 @@
+from datetime import date
 from typing import Optional
-from xml.etree.ElementTree import indent
 
-from pydantic import BaseModel, EmailStr, ValidationError
+from pydantic import BaseModel, EmailStr, ValidationError, Field
 
 
 class UserInput(BaseModel):
     name: str
     email: EmailStr
     query: str
-    age: Optional[int] = None
-
+    purchase: Optional[date] = None
+    order_id: Optional[int] = Field(
+        None,
+        title="订单ID",
+        description="5 位订单号（不能以 0 开头）",
+        ge=10000,
+        le=99999
+    )
 
 
 def create_user(user_input):
@@ -45,33 +51,6 @@ def error_validate_demo():
 
 
 def validate_user_input(user_input: dict):
-    """验证用户输入数据并创建 UserInput 实例。
-
-    使用 Pydantic 模型对用户输入进行校验，如果校验成功则打印格式化的 JSON 数据，
-    如果校验失败则打印错误信息并抛出 ValidationError 异常。
-
-    Args:
-        user_input: 包含用户输入数据的字典，必须包含 name、email、query 字段，
-                   age 字段为可选。
-
-    Raises:
-        ValidationError: 当输入数据不符合 UserInput 模型的校验规则时抛出。
-
-    Examples:
-        >>> input_data = {
-        ...     "name": "Pkmer",
-        ...     "email": "Pkmer@example.com",
-        ...     "query": "Happy Coding"
-        ... }
-        >>> validate_user_input(input_data)
-        ✅ Valid user input created:
-        {
-          "name": "Pkmer",
-          "email": "Pkmer@example.com",
-          "query": "Happy Coding",
-          "age": null
-        }
-    """
     try:
         user_input = UserInput(**user_input)
         print(f"✅ Valid user input created:")
@@ -88,6 +67,8 @@ if __name__ == '__main__':
     input_data = {
         "name": "Pkmer",
         "email": "Pkmer@example.com",
-        "query": "Happy Coding"
+        "query": "Happy Coding",
+        "purchase": "2026-05-08",
+        "order_id": "666",
     }
     validate_user_input(input_data)
