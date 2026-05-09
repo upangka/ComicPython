@@ -3,13 +3,18 @@ from typing import Type
 
 
 class Pet(ABC):
-    """宠物的抽象基类"""
+    """宠物的抽象基类
+  ┌─────────────────────────────────────────────┐
+  │  抽象产品（AbstractProduct）                  │
+  │  定义所有产品必须遵守的接口                     │
+  └─────────────────────────────────────────────┘
+    """
 
     def __init__(self, name: str):
         self.name = name
 
     @abstractmethod
-    def speek(self):
+    def speak(self):
         ...
 
     @abstractmethod
@@ -18,9 +23,16 @@ class Pet(ABC):
 
 
 class Dog(Pet):
-    """狗"""
+    """狗
+      ┌─────────────────────────────────────────────┐
+      │  具体产品（ConcreteProduct）                  │
+      │  同时，Dog 类本身也是——                       │
+      │  具体工厂（ConcreteFactory）                  │
+      │  "调用 Dog(name)" 就是工厂的创建方法           │
+      └─────────────────────────────────────────────┘
+    """
 
-    def speek(self):
+    def speak(self):
         print(f"{self.name}汪汪汪")
 
     def __str__(self):
@@ -28,9 +40,15 @@ class Dog(Pet):
 
 
 class Cat(Pet):
-    """猫"""
-
-    def speek(self):
+    """猫
+      ┌─────────────────────────────────────────────┐
+      │  具体产品（ConcreteProduct）                  │
+      │  同时，Cat 类本身也是——                       │
+      │  具体工厂（ConcreteFactory）                  │
+      │  "调用 Cat(name)" 就是工厂的创建方法           │
+      └─────────────────────────────────────────────┘
+    """
+    def speak(self):
         print(f"{self.name}喵喵喵")
 
     def __str__(self):
@@ -40,6 +58,14 @@ class Cat(Pet):
 class PetShop:
     """宠物店"""
     def __init__(self, animal_factory: Type[Pet]):
+        """
+      ┌─────────────────────────────────────────────────┐
+      │  animal_factory 的类型注解 Type[Pet]             │
+      │  这就是"抽象工厂（AbstractFactory）"的角色         │
+      │  它说：我需要一个可调用对象，调用后返回 Pet 实例      │
+      │  任何满足这个签名的类/函数都可以注入                 │
+      └─────────────────────────────────────────────────┘
+        """
         self.pet_factory  = animal_factory
 
     def buy_pet(self, name: str):
@@ -52,4 +78,4 @@ if __name__ == '__main__':
     import random
     animal_factory = random.choice(animal_factories)
     pet = PetShop(animal_factory).buy_pet("小橙子")
-    pet.speek()
+    pet.speak()
