@@ -7,7 +7,7 @@ from sz_library.second_floor.section_x.row_three import book
 
 if __name__ == "__main__":
     print("深圳图书馆北馆藏书列表：")
-    print("─" * 50)
+    print("━" * 80)
     # 创建更多书籍
     books = [
         book.Book("流畅的Python", "Luciano Ramalho", "978-7-115-45466-9"),
