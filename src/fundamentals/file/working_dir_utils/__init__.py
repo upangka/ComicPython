@@ -1,4 +1,6 @@
-
+"""
+Hello World
+"""
 def print_working_dir():
     import os
     print(os.getcwd())
@@ -7,5 +9,6 @@ def print_working_dir():
     from pathlib import Path
     print(Path("fear.txt").resolve())
 
+print(__doc__)
 if __name__ == '__main__':
     print_working_dir()
