@@ -146,6 +146,11 @@ agent = create_agent(model, system_prompt=SystemMessage(content=SYSTEM_PROMPT))
 - 禁用思考链模式以提升响应速度
 - 使用 DeepSeek V4 Pro 模型，平衡性能和成本
 
+> 这里使用的是agent而不是chat_model的形式，是因为pycharm的`AI Agent Debugger`插件不支持`chat_model`，他是处理LangGraph的
+
+![agent_debugger](./agent_debugger.png)
+
+
 ### Node 类的设计
 
 ```python
