@@ -21,12 +21,13 @@ chat_anthropic = ChatAnthropic(
     api_key=API_KEY
 )
 
-# chat_deepseek = init_chat_model("deepseek:deepseek-v4-flash")
-chat_deepseek = ChatDeepSeek(
-    model=MODEL_NAME,
-    api_base="https://api.deepseek.com",
-    api_key=API_KEY
-)
+from langchain.chat_models import init_chat_model
+chat_deepseek = init_chat_model("deepseek:deepseek-v4-pro")
+# chat_deepseek = ChatDeepSeek(
+#     model=MODEL_NAME,
+#     api_base="https://api.deepseek.com",
+#     api_key=API_KEY
+# )
 
 
 def print_response(res: AIMessage):
