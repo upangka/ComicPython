@@ -2,7 +2,6 @@ import os
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import AIMessage
-from langchain_deepseek import ChatDeepSeek
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
 
