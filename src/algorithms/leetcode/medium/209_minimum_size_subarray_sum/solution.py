@@ -17,6 +17,7 @@ class Solution:
         for right, num in enumerate(nums):
             curr += num
             while curr >= target:
+                # 在收缩中更新值
                 result = min(result, right - left + 1)
                 curr -= nums[left]
                 left += 1
@@ -26,5 +27,4 @@ class Solution:
 
 if __name__ == '__main__':
     import doctest
-
     doctest.testmod(optionflags=doctest.ELLIPSIS)
