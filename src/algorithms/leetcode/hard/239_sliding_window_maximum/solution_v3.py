@@ -1,3 +1,4 @@
+from collections import deque
 class Solution:
     def maxSlidingWindow(self, nums: list[int], k: int) -> list[int]:
         """
@@ -5,7 +6,7 @@ class Solution:
         只保留有竞争力的元素
         """
         # 窗口存储的是当前窗口内元素的索引
-        window = []
+        window = deque()
         result = []
         # 固定窗口不用维护left
         for right, val in enumerate(nums):
@@ -19,6 +20,6 @@ class Solution:
             if left >= 0:
                 # 维护窗口,清除不在窗口的元素
                 while window and window[0] < left:
-                    window.pop(0) # 时间复杂度O(k)
+                    window.popleft() # 时间复杂度O(1)
                 result.append(nums[window[0]])
         return result
