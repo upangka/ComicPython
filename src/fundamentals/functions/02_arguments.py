@@ -18,9 +18,9 @@ func(1, c=3, b=2)
 # func(*values)
 
 values = {
-    "c": "北馆",
-    "b": "图书馆",
     "a": "深圳",
+    "b": "图书馆",
+    "c": "北馆"
 }
-# 等价于 func(a="深圳", b="图书馆", c="北馆")
+func(*values)
 func(**values)
