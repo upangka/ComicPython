@@ -16,6 +16,7 @@ def query_data(table, limit=0, offset=20):
     print(f"select from {table} limit {limit, offset}")
 
 
+
 query_data("user")
 
 
@@ -28,3 +29,4 @@ def wrapper(*args, **kwargs):
 wrapper("user", limit=10, offset=20)
 wrapper("user", 10, 20)
 wrapper(**{"table": "user", "limit": 10, "offset": 20})
+
