@@ -5,12 +5,14 @@ L2 装饰器语法：参数化重试装饰器（@语法糖方式）
 与手动调用方式相比，使用 @retry_factory(times=3, delay=0.5) 的方式
 更加简洁和 Pythonic。装饰器工厂返回的装饰器会自动应用到被装饰函数上。
 """
-import time
 import logging
+import time
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def retry_factory(times: int = 2, delay: float = 0.5):
+
+def retry_factory(*, times: int = 2, delay: float = 0.5):
     """装饰器工厂创建一个装饰器
     Args:
         times: 最大重试次数
@@ -21,6 +23,7 @@ def retry_factory(times: int = 2, delay: float = 0.5):
 
     def retry(func):
         """重试装饰器"""
+
         def wrapper(*args, **kwargs):
             """重试逻辑"""
             for i in range(times):

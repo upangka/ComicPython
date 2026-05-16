@@ -42,6 +42,7 @@ def risk_call():
         raise ConnectionError("❌️网络不稳定")
     return "✅ 调用成功！"
 
+# 手动调用方式
 risk_call = retry_factory(times=3, delay=0.5)(risk_call)
 
 if __name__ == '__main__':
