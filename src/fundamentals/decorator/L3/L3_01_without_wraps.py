@@ -6,11 +6,13 @@
 导致调试困难、文档生成错误以及 introspection 功能失效。
 """
 
+
+
 import time
 from collections.abc import Callable
 
-
 def timer[**P, R](func: Callable[P, R]) -> Callable[P, R]:
+
     def wrapper(*args: P.args, **kwargs: P.kwargs):
         """我是wrapper"""
         start = time.perf_counter()
@@ -20,14 +22,12 @@ def timer[**P, R](func: Callable[P, R]) -> Callable[P, R]:
 
     return wrapper
 
-
 @timer
 def greet(name, msg="我在深圳图书馆北馆学习"):
     """HI learning 深圳"""
     current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     print(f"现在的时间是：{current_time}\n Hi {name} \n{msg}")
     time.sleep(3)
-
 
 # 验证元数据丢失
 print(f"__name__:       {greet.__name__}")
@@ -36,7 +36,6 @@ print(f"__annotations__:{greet.__annotations__}")
 print(f"__wrapped__ 存在? {hasattr(greet, '__wrapped__')}")
 
 import inspect
-
 print(f"signature:      {inspect.signature(greet)}")
 
 """输出
