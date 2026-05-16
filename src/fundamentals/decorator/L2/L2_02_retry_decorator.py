@@ -12,8 +12,11 @@ logger = logging.getLogger(__name__)
 
 def retry_factory(times: int = 2, delay: float = 0.5):
     """装饰器工厂创建一个装饰器
-    Return:
-        装饰器
+    Args:
+        times: 最大重试次数
+        delay: 每次重试间隔（秒）
+    Returns:
+        一个装饰器
     """
 
     def retry(func):
