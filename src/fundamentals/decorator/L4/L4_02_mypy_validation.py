@@ -48,7 +48,8 @@ print(inspect.signature(
     with_appid))  # (func: collections.abc.Callable[typing.Concatenate[str, ~P], ~R]) -> collections.abc.Callable[~P, ~R]
 print(inspect.signature(with_appid_no_annotations))  # (func)
 
-# 使用mypy打印签名
+# 使用mypy打印签名，观察签名
+# 要运行python代码需要注释，运行mypy则放开
 reveal_type(get_user)  # Revealed type is "def (user_id: int) -> dict[str, int | str]"
 # 这里可以可以很清晰的看到Concatenate的作用
 reveal_type(with_appid)  # def [P, R] (func: def (str, *P.args, **P.kwargs) -> R) -> def (*P.args, **P.kwargs) -> R
