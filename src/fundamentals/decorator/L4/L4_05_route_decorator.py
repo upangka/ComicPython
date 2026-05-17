@@ -29,6 +29,10 @@ class Router:
     """路由对象"""
 
     def __init__(self):
+        """初始化
+        key: (path,method)
+        value: Handler
+        """
         self._routes: dict[tuple[str, str], Handler] = {}
 
     @property
@@ -76,4 +80,42 @@ def get_user(user_id: int, username: str):
     print(f"获取用户 {user_id=} 的信息 {username = }")
 
 
-reveal_type(get_user)
+@router.route(path="/post/{post_id}", method="POST")
+def create_post(post_id: int, title: str, content: str):
+    """创建帖子"""
+    print(f"创建帖子 {post_id=} {title = } {content=}")
+
+
+# ======================以上代码代码完成注释==================================
+
+from pprint import pprint
+
+pprint(router.router)
+
+# 模拟框架调用
+
+request1 = Request(
+    path_params={"user_id": "001"},
+    query_params={"username": "Alice"},
+    body={},
+)
+
+request2 = Request(
+    path_params={"post_id": "M03"},
+    query_params={},
+    body={"title": "Pkmer", "content": "在深圳图书馆学习Learning Python Programming 3rd Edition"},
+)
+
+handler1 = router.router[("/users/{user_id}", "GET")]
+handler2 = router.router[("/post/{post_id}", "POST")]
+
+for handler, request in zip([handler1, handler2], [request1, request2]):
+    handler(request)
+
+
+"""输出
+{('/post/{post_id}', 'POST'): <function create_post at 0x000001E427D30FE0>,
+ ('/users/{user_id}', 'GET'): <function get_user at 0x000001E427D30E00>}
+获取用户 user_id='001' 的信息 username = 'Alice'
+创建帖子 post_id='M03' title = 'Pkmer' content='在深圳图书馆学习Learning Python Programming 3rd Edition'
+"""
