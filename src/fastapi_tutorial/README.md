@@ -1,3 +1,7 @@
+```shell
+uv add "fastapi[standard-no-fastapi-cloud-cli]"
+```
+
 ```txt
 fastapi_tutorial/
 ├── .gitignore
