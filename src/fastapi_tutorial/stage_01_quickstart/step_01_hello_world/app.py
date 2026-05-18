@@ -2,10 +2,15 @@ from fastapi import FastAPI
 
 app = FastAPI(
     title="FastAPI Tutorial",
-    description="一个用于学习 FastAPI 的示例项目",
+    summary="FastAPI Tutorial",
+    description="A sample project for learning FastAPI.",
     version="0.1.0",
+    contact={
+        "name": "Pkmer",
+        "url": "https://juejin.cn/user/3112047871800540"
+    }
 )
 
-@app.get("/", summary="根路径")
+@app.get("/", summary="root path")
 async def read_root():
     return ("Hello","World")
