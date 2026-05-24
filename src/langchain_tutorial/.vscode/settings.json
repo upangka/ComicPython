@@ -1,0 +1,13 @@
+{
+    // 1. 专门指定 Python 文件的格式化工具 (新版方式)
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",  // 关键：指向 autopep8 扩展
+        "editor.formatOnSave": true                      // 单独对 Python 开启保存格式化
+    },
+    
+    // 2. 全局也建议开启 (可选)
+    "editor.formatOnSave": true,
+    
+    // 3. 注意：此行如果存在，建议直接删除或注释掉 (新版中已废弃)
+    // "python.formatting.provider": "autopep8", 
+}
