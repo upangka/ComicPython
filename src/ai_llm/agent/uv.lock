@@ -25,6 +25,7 @@ dependencies = [
     { name = "nbconvert" },
     { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "requests" },
 ]
 
 [package.metadata]
@@ -42,6 +43,7 @@ requires-dist = [
     { name = "nbconvert", specifier = ">=7.17.1" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
+    { name = "requests", specifier = ">=2.34.2" },
 ]
 
 [[package]]
