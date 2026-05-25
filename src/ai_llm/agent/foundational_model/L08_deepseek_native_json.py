@@ -6,8 +6,9 @@ It shows how to configure DeepSeek models with response_format='json_object' to 
 JSON responses, and processes exam questions from a text file to extract question-answer pairs
 in JSON format without LangChain abstraction.
 """
-import os
 import json
+import os
+
 from openai import OpenAI
 
 client = OpenAI(
