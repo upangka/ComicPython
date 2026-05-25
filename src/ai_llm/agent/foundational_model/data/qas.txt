@@ -1,0 +1,11 @@
+
+Python中如何定义函数?def f(): pass
+JavaScript中如何声明常量?const x = 10;
+Java的入口方法签名?public static void main(String[] args)
+C语言如何动态分配内存?malloc(size)
+SQL如何查询所有列?SELECT * FROM table;
+Python列表如何追加元素?list.append(item)
+JavaScript如何打印输出?console.log("text");
+Git提交命令?git commit -m "msg"
+HTML注释怎么写?<!-- 注释 -->
+Python如何导入模块?import module
