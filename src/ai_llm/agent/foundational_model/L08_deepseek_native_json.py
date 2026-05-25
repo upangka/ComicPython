@@ -7,7 +7,7 @@ JSON responses, and processes exam questions from a text file to extract questio
 in JSON format without LangChain abstraction.
 """
 import os
-
+import json
 from openai import OpenAI
 
 client = OpenAI(
@@ -43,5 +43,6 @@ with open("data/qas.txt", mode="rt", encoding="utf-8") as f:
             },
             extra_body={"thinking": {"type": "disabled"}}
         )
-        print(response.choices[0].message.content)
+        json_dict = json.loads(response.choices[0].message.content)
+        print(json.dumps(json_dict, ensure_ascii=False, indent=4))
         print('━' * 100)
