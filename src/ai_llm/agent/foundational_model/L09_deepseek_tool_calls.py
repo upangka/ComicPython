@@ -62,19 +62,22 @@ tools = [
     },
 ]
 
-messages = [{"role": "user", "content": "What's the weather in ShenZhen, China"}]
+messages = [{"role": "user", "content": "What's the weather in 桂林 and 深圳, China"}]
 # messages = [{"role": "user", "content": "I'm recharging and studying right now in the ShenZhen Library."}]
 
 message = send_message(messages)
 print(message.model_dump_json(indent=4))
 messages.append(message)
 if message.tool_calls:
-    tool_call = message.tool_calls[0]
-    func_name = tool_call.function.name
-    args = json.loads(tool_call.function.arguments)
-    observation = tools_dict.get(func_name)(WeatherParams(**args))
+    # Execute ALL tool calls and collect every result before sending the next request.
+    # The API requires one tool message per tool_call_id in the assistant message.
+    for tool_call in message.tool_calls:
+        func_name = tool_call.function.name
+        args = json.loads(tool_call.function.arguments)
+        observation = tools_dict.get(func_name)(WeatherParams(**args))
+        messages.append({"role": "tool", "content": observation, "tool_call_id": tool_call.id})
 
-    messages.append({"role": "tool", "content": observation, "tool_call_id": tool_call.id})
+    # Send a single follow-up request only after all tool results are appended.
     message = send_message(messages)
     print(message.content)
     print(getattr(message, "reasoning_content"))
@@ -90,20 +93,42 @@ if message.tool_calls:
     "function_call": null,
     "tool_calls": [
         {
-            "id": "call_00_2khQSjI08eZSazBQfs2T8575",
+            "id": "call_00_CcFstJQuBwR1gWqAVFhO0203",
             "function": {
-                "arguments": "{\"city\": \"ShenZhen\"}",
+                "arguments": "{\"city\": \"桂林\"}",
                 "name": "get_weather"
             },
             "type": "function",
             "index": 0
+        },
+        {
+            "id": "call_01_frwSN5l8QR7SblOAXh4p6825",
+            "function": {
+                "arguments": "{\"city\": \"深圳\"}",
+                "name": "get_weather"
+            },
+            "type": "function",
+            "index": 1
         }
     ],
-    "reasoning_content": "The user is asking for the weather in ShenZhen, China. I should use the get_weather function with the city name \"ShenZhen\" (just the city name, without country or state as per the description)."
+    "reasoning_content": "The user is asking for weather in two cities in China: 桂林 (Guilin) and 深圳 (Shenzhen). I need to make two separate weather API calls for these cities."
 }
 ************************* tool call start *************************
-Getting weather for ShenZhen
+Getting weather for 桂林
 ************************* tool call  end *************************
-深圳目前的天气是 **29°C**，大部分晴朗 ☀️。
-The weather in ShenZhen is 29°C and mostly clear (大部分晴 means "mostly clear/fair"). Let me present this to the user.
+************************* tool call start *************************
+Getting weather for 深圳
+************************* tool call  end *************************
+以下是桂林和深圳的天气情况：
+
+| 城市 | 温度 | 天气状况 |
+|------|------|----------|
+| **桂林** | 29℃ | 🌤️ 大部分晴 |
+| **深圳** | 29℃ | 🌤️ 大部分晴 |
+
+两个城市的天气非常相似，都是29°C，大部分晴朗。天气不错，适合外出活动！有什么其他需要了解的吗？
+Both weather results are in. Let me summarize:
+
+- 桂林 (Guilin): 29°C, 大部分晴 (mostly sunny)
+- 深圳 (Shenzhen): 29°C, 大部分晴 (mostly sunny)
 """
